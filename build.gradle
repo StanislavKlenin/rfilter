@@ -14,4 +14,8 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/stax/stax
     compile group: 'stax', name: 'stax', version: '1.2.0'
+    // https://mvnrepository.com/artifact/org.glassfish/javax.json
+    compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
+    // https://mvnrepository.com/artifact/net.sf.opencsv/opencsv
+    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
 }
