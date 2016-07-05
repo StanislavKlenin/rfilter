@@ -3,6 +3,7 @@ plugins {
     id 'application'
 }
 
+sourceCompatibility = 1.8
 mainClassName = "rfilter.util.Launcher"
 version = "0.0.1"
 
@@ -11,4 +12,6 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/stax/stax
+    compile group: 'stax', name: 'stax', version: '1.2.0'
 }
