@@ -8,6 +8,8 @@ import java.util.Date;
 // (similar to Scala case class but now mutable for simplicity)
 public class Report {
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz");
+    public static final String HEADER =
+            "client-address,client-guid,request-time,service-guid,retries-request,packets-requested,packets-serviced,max-hole-size";
 
     public String clientAddress;
     public String clientGuid;
@@ -40,19 +42,18 @@ public class Report {
         this.maxHoleSize = maxHoleSize;
     }
 
-    // comma-separated, for debug purposes only
-    // TODO: string builder
+    // comma-separated, as in input
     @Override
     public String toString() {
-        Character comma = ',';
-        return clientAddress + comma +
-               clientGuid + comma +
-               requestTime + comma +
-               serviceGuid + comma +
-               retriesRequest + comma +
-               packetsRequested + comma +
-               packetsServiced + comma +
-               maxHoleSize;
+        return String.format("%s,%s,%s,%s,%d,%d,%d,%d",
+                             clientAddress,
+                             clientAddress,
+                             DATE_FORMAT.format(requestTime),
+                             serviceGuid,
+                             retriesRequest,
+                             packetsRequested,
+                             packetsServiced,
+                             maxHoleSize);
     }
 }
 
