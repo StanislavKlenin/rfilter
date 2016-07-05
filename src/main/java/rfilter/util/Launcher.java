@@ -2,9 +2,11 @@ package rfilter.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.BufferedWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -105,11 +107,11 @@ public class Launcher {
                 return;
             }
         }
+
         Map<String, Long> serviceGuidStats = null;
-        PrintWriter out = null;
-        try {
-            File file = new File(outfile);
-            out = new PrintWriter(file);
+        try (
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outfile)))
+        ) {
             // print header
             out.println(Report.HEADER);
             // and sorted output
@@ -118,14 +120,11 @@ public class Launcher {
                     stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime))
                             .peek(out::println)
                             .collect(Collectors.groupingBy(r -> r.serviceGuid, Collectors.counting()));
-
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             // any error condition stops the flow
             System.err.println("failed to write " + outfile);
             e.printStackTrace();
             return;
-        } finally {
-            if (out != null) out.close();
         }
 
         serviceGuidStats.entrySet().stream()
