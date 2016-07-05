@@ -76,7 +76,7 @@ public class JSONExtractor implements Extractor {
                     report.maxHoleSize = jsonr.getInt();
                     break;
                 case "request-time":
-                    report.requestTime = Date.from(Instant.ofEpochSecond(jsonr.getLong()));
+                    report.requestTime = Date.from(Instant.ofEpochMilli(jsonr.getLong()));
                     break;
                 case "client-guid":
                     report.clientGuid = jsonr.getString();
