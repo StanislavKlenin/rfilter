@@ -11,6 +11,12 @@ repositories {
     jcenter()
 }
 
+jar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/stax/stax
     compile group: 'stax', name: 'stax', version: '1.2.0'
@@ -18,4 +24,10 @@ dependencies {
     compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
     // https://mvnrepository.com/artifact/net.sf.opencsv/opencsv
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
+}
+
+run {
+    if(System.getProperty("exec.args") != null) {
+        args System.getProperty("exec.args").split()
+    }
 }
