@@ -17,8 +17,7 @@ public class XMLExtractor implements Extractor {
         try {
             xmlr = xmlif.createXMLStreamReader(stream.toString(), stream);
         } catch (XMLStreamException e) {
-            //e.printStackTrace();
-            // TODO: chain it into more general exception
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -52,8 +51,7 @@ public class XMLExtractor implements Extractor {
                 findNextRecord();
                 return atRecord();
             } catch (XMLStreamException e) {
-                // letting it pass silently for now, as this is standard iterator API
-                return false;
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
 
@@ -77,9 +75,7 @@ public class XMLExtractor implements Extractor {
                 }
                 return report;
             } catch (XMLStreamException | ParseException e) {
-                //e.printStackTrace();
-                // for now, return default reports
-                return new Report();
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
 

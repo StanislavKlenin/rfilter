@@ -28,8 +28,7 @@ public class CSVExtractor implements Extractor {
             try {
                 nextLine = csvr.readNext();
             } catch (IOException e) {
-                e.printStackTrace();
-                nextLine = null;
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
 
@@ -38,7 +37,7 @@ public class CSVExtractor implements Extractor {
             try {
                 nextLine = csvr.readNext();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e.getMessage(), e);
             }
             return (nextLine != null);
         }
@@ -56,8 +55,7 @@ public class CSVExtractor implements Extractor {
                                   Integer.parseInt(nextLine[6]),         // packets-serviced
                                   Integer.parseInt(nextLine[7]));        // max-hole-size
             } catch (ParseException e) {
-                e.printStackTrace();
-                return new Report();
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
     }
