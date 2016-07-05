@@ -83,7 +83,7 @@ public class XMLExtractor implements Extractor {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            return null;
+            return new Report();
         }
 
         private void updateReport(String tag, Report report) throws ParseException {

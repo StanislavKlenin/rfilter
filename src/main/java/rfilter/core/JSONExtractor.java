@@ -52,11 +52,13 @@ public class JSONExtractor implements Extractor {
                     case VALUE_STRING:
                         updateReport(key, report);
                         break;
-                    default:
+                    case END_OBJECT:
                         return report;
+                    default:
+                        return new Report();
                 }
             }
-            return report;
+            return new Report();
         }
 
         private void updateReport(String key, Report report) {
