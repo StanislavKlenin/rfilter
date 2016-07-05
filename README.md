@@ -4,7 +4,7 @@ sorting/filtering programming assignment
 ## Build and run
 
 For any method, `-o` argument (output file) and at least one non-option argument is required, but any number of reports may be specified in any order.
-Service GUID summary is printed to standard output.
+Service GUID summary (`GUID=count` format, sorted by count in descending order) is printed to standard output.
 
 ### Example with Gradle and shadowJar plugin
 in `rfilter` directory execute:
