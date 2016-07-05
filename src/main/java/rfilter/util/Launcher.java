@@ -3,13 +3,18 @@ package rfilter.util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.File;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 import rfilter.core.*;
 
@@ -64,16 +69,30 @@ public class Launcher {
         int idx = filename.lastIndexOf('.');
         return idx >= 0 ? filename.substring(idx) : "";
     }
+    public static void usage() {
+        System.out.println("usage:");
+        System.out.println("appname -b outfile <infiles>");
+    }
 
     public static void main(String [] args) {
-        if (args.length == 0) {
+        OptionParser parser = new OptionParser("o:");
+        OptionSet options = parser.parse(args);
+        if (!options.hasArgument("o")) {
+            System.out.println("no output file");
+            usage();
+            return;
+        }
+        String outfile = (String) options.valueOf("o");
+        List<String> remaining = (List<String>) options.nonOptionArguments();
+        if (remaining.isEmpty()) {
             System.out.println("no input files");
+            usage();
             return;
         }
 
         // initial empty stream
         Stream<Report> stream = Stream.empty();
-        for (String filename : args) {
+        for (String filename : remaining) {
             // create extractor (by file extension)
             Extractor extractor = createExtractor(filename);
             if (extractor != null) {
@@ -86,18 +105,29 @@ public class Launcher {
                 return;
             }
         }
-        // print header
-        System.out.println(Report.HEADER);
+        Map<String, Long> serviceGuidStats = null;
+        PrintWriter out = null;
+        try {
+            File file = new File(outfile);
+            out = new PrintWriter(file);
+            // print header
+            out.println(Report.HEADER);
+            // and sorted output
+            // peek() is non-terminal so stream can still be operated upon after we print it
+            serviceGuidStats =
+                    stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime))
+                            .peek(out::println)
+                            .collect(Collectors.groupingBy(r -> r.serviceGuid, Collectors.counting()));
 
-        // and sorted output
-        //stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime)).forEach(System.out::println);
-        // peek() is non-terminal so stream can still be operated upon after we print it
-        // so we can collect service guid usage stats
-        Map<String, Long> serviceGuidStats =
-                stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime))
-                        .peek(System.out::println)
-                        .collect(Collectors.groupingBy(r -> r.serviceGuid, Collectors.counting()));
-        // and print it too, in descending order
+        } catch (FileNotFoundException e) {
+            // any error condition stops the flow
+            System.err.println("failed to write " + outfile);
+            e.printStackTrace();
+            return;
+        } finally {
+            if (out != null) out.close();
+        }
+
         serviceGuidStats.entrySet().stream()
                 .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
                 .forEach(System.out::println);
