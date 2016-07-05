@@ -5,9 +5,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 public class XMLExtractor implements Extractor {
@@ -15,7 +13,6 @@ public class XMLExtractor implements Extractor {
     XMLInputFactory xmlif = XMLInputFactory.newInstance();
     XMLStreamReader xmlr;
 
-    public static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss zzz");
     public XMLExtractor(InputStream stream) {
         try {
             xmlr = xmlif.createXMLStreamReader("---", stream);
@@ -101,7 +98,7 @@ public class XMLExtractor implements Extractor {
                     report.maxHoleSize = Integer.parseInt(xmlr.getText());
                     break;
                 case "request-time":
-                    report.requestTime = DATE_FORMAT.parse(xmlr.getText());
+                    report.requestTime = Report.DATE_FORMAT.parse(xmlr.getText());
                     break;
                 case "client-guid":
                     report.clientGuid = xmlr.getText();

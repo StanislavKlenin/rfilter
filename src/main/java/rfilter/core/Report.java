@@ -1,10 +1,14 @@
 package rfilter.core;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-// datatype to represent a report antry
+// datatype to represent a report entry
 // (similar to Scala case class but now mutable for simplicity)
 public class Report {
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz");
+
     public String clientAddress;
     public String clientGuid;
     public Date   requestTime;
