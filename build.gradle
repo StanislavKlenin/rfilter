@@ -25,6 +25,8 @@ dependencies {
     compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
     // https://mvnrepository.com/artifact/net.sf.opencsv/opencsv
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
+    // https://mvnrepository.com/artifact/net.sf.jopt-simple/jopt-simple
+    compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.2'
 }
 
 run {
