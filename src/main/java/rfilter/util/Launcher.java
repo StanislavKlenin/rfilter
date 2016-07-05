@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -79,9 +81,21 @@ public class Launcher {
                 return;
             }
         }
-        // print header and sorted output
+        // print header
         System.out.println(Report.HEADER);
-        stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime)).forEach(System.out::println);
+
+        // and sorted output
+        //stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime)).forEach(System.out::println);
+        // peek() is non-terminal so stream can still be operated upon after we print it
+        // so we can collect service guid usage stats
+        Map<String, Long> serviceGuidStats =
+                stream.sorted((a, b) -> a.requestTime.compareTo(b.requestTime))
+                        .peek(System.out::println)
+                        .collect(Collectors.groupingBy(r -> r.serviceGuid, Collectors.counting()));
+        // and print it too, in descending order
+        serviceGuidStats.entrySet().stream()
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .forEach(System.out::println);
     }
 }
 
