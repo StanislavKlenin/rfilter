@@ -15,9 +15,10 @@ public class XMLExtractor implements Extractor {
 
     public XMLExtractor(InputStream stream) {
         try {
-            xmlr = xmlif.createXMLStreamReader("---", stream);
+            xmlr = xmlif.createXMLStreamReader(stream.toString(), stream);
         } catch (XMLStreamException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            // TODO: chain it into more general exception
         }
     }
 
@@ -75,12 +76,11 @@ public class XMLExtractor implements Extractor {
                     }
                 }
                 return report;
-            } catch (XMLStreamException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } catch (XMLStreamException | ParseException e) {
+                //e.printStackTrace();
+                // for now, return default reports
+                return new Report();
             }
-            return new Report();
         }
 
         private void updateReport(String tag, Report report) throws ParseException {
