@@ -66,6 +66,11 @@ public class Launcher {
     }
 
     public static void main(String [] args) {
+        if (args.length == 0) {
+            System.out.println("no input files");
+            return;
+        }
+
         // initial empty stream
         Stream<Report> stream = Stream.empty();
         for (String filename : args) {
